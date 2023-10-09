@@ -85,8 +85,8 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
                 "123456",
             )
             Log.e("Response", response.toString())
-            val displayInfo = RegisterDisplay().xmlToJson(response ?: "")
-            Log.e("display Info", displayInfo.toString())
+          //  val displayInfo = RegisterDisplay().xmlToJson(response ?: "")
+           // Log.e("display Info", displayInfo.toString())
 //        }
         }
     }

@@ -102,6 +102,7 @@ dependencies {
     implementation (group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-xml', version: '2.15.2'){
         exclude group: 'javax.xml.stream'
     }
+    implementation 'javax.xml.stream:stax-api:1.0'
     implementation group: 'com.fasterxml.jackson.module', name: 'jackson-module-kotlin', version: '2.15.2'
 
 //    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-xml:1.2.2'

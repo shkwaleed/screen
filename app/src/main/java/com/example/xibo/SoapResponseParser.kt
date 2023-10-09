@@ -14,7 +14,7 @@ import java.io.StringReader
 import javax.xml.parsers.DocumentBuilderFactory
 
 sealed class SoapResult {
-    data class Success(val displayInfo: DisplayInfo) : SoapResult()
+    data class Success(val displayInfo: String) : SoapResult()
     data class Error(val message: String) : SoapResult()
 }
 fun convertXmlStringToJson(xmlString: String): JSONObject {

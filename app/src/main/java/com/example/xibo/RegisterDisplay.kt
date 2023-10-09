@@ -180,7 +180,8 @@ class RegisterDisplay {
                     val responseBody = xmlToJson(response.body?.string()?:"")
 //                    val activationMessage = extractDataFromJson(responseBody)
                     Log.e("Response Json", responseBody)
-                    return@withContext response.body?.string()
+
+                    return@withContext responseBody
                 } else {
                     // Handle error cases
                     return@withContext null
