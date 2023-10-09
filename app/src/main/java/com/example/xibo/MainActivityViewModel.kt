@@ -27,21 +27,23 @@ class MainActivityViewModel@Inject constructor(
         get() = _registerDisplayResponse
 
     fun registerDisplay(registerDisplayRequest: RegisterDisplayRequest) {
-        val requestBody =
-            """<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns="urn:xmds" xmlns:types="urn:xmds/encodedTypes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <soap:Body soap:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
-    <tns:RegisterDisplay>
-      <serverKey xsi:type="xsd:string">StqjvluN</serverKey>
-      <hardwareKey xsi:type="xsd:string">12332112332112</hardwareKey>
-      <displayName xsi:type="xsd:string">PostMan</displayName>
-      <clientType xsi:type="xsd:string">android</clientType>
-      <clientVersion xsi:type="xsd:string">3</clientVersion>
-      <clientCode xsi:type="xsd:int">311</clientCode>
-      <macAddress xsi:type="xsd:string">123456</macAddress>
-    </tns:RegisterDisplay>
-  </soap:Body>
-</soap:Envelope>""".trimIndent()
-        Log.e("Request Json",(xmlToJson(requestBody)))
+      /*  val requestBody =
+            "<soap:Envelope xmlns:soap='http://schemas.xmlsoap.org/soap/envelope/' xmlns:soapenc='http://schemas.xmlsoap.org/soap/encoding/' xmlns:tns='urn:xmds' xmlns:types='urn:xmds/encodedTypes' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' xmlns:xsd='http://www.w3.org/2001/XMLSchema'><soap:Body soap:encodingStyle='http://schemas.xmlsoap.org/soap/encoding/'><tns:RegisterDisplay>
+        <serverKey xsi:type='xsd:string'>StqjvluN</serverKey>
+        <hardwareKey xsi:type='xsd:string'>123123345</hardwareKey>
+        <displayName xsi:type='xsd:string'>Waqar</displayName>
+        <clientType xsi:type='xsd:string'>mobile</clientType>
+        <clientVersion xsi:type='xsd:string'>1.0</clientVersion>
+        <clientCode xsi:type='xsd:int'>1</clientCode>
+        <macAddress xsi:type='xsd:string'>123456</macAddress>
+        </tns:RegisterDisplay>
+        </soap:Body>
+        </soap:Envelope>".trimIndent()*/
+
+        //val requestBody ="""<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns="urn:xmds" xmlns:types="urn:xmds/encodedTypes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"><soap:Body soap:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"><tns:RegisterDisplay><serverKey xsi:type="xsd:string">${registerDisplayRequest.serverKey}</serverKey><hardwareKey xsi:type="xsd:string">${registerDisplayRequest.hardwareKey}</hardwareKey><displayName xsi:type="xsd:string">${registerDisplayRequest.displayName}</displayName><clientType xsi:type="xsd:string">${registerDisplayRequest.clientType}</clientType><clientVersion xsi:type="xsd:string">${registerDisplayRequest.clientVersion}</clientVersion><clientCode xsi:type="xsd:int">$${registerDisplayRequest.clientCode}</clientCode><macAddress xsi:type="xsd:string">${registerDisplayRequest.macAddress}</macAddress></tns:RegisterDisplay></soap:Body></soap:Envelope>""".trimIndent()
+        var requestBody="<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:soapenc=\"http://schemas.xmlsoap.org/soap/encoding/\" xmlns:tns=\"urn:xmds\" xmlns:types=\"urn:xmds/encodedTypes\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\"><soap:Body soap:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\"><tns:RegisterDisplay><serverKey xsi:type=\"xsd:string\">${registerDisplayRequest.serverKey}</serverKey><hardwareKey xsi:type=\"xsd:string\">${registerDisplayRequest.hardwareKey}</hardwareKey><displayName xsi:type=\"xsd:string\">${registerDisplayRequest.displayName}</displayName><clientType xsi:type=\"xsd:string\">${registerDisplayRequest.clientType}</clientType><clientVersion xsi:type=\"xsd:string\">${registerDisplayRequest.clientVersion}</clientVersion><clientCode xsi:type=\"xsd:int\">${registerDisplayRequest.clientCode}</clientCode><macAddress xsi:type=\"xsd:string\">${registerDisplayRequest.macAddress}</macAddress></tns:RegisterDisplay></soap:Body></soap:Envelope>"
+        //requestBody=requestBody.replace("'",Char(64).toString())
+        Log.e("Request Json",(requestBody))
         viewModelScope.launch {
             val response: ResponseBody? = mainActivityRepository.registerDisplay(requestBody)
 
