@@ -16,6 +16,7 @@ import io.reactivex.schedulers.Schedulers
 import okhttp3.Call
 import okhttp3.Callback
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
 import org.json.XML
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory
@@ -161,7 +162,7 @@ class RegisterDisplay {
 //
 //                // Create a RequestBody with the SOAP request body and set the Content-Type header
 //                val requestBody =
-//                    RequestBody.create(MediaType.parse("application/xml"), soapRequestBody)
+//                    RequestBody.create("application/xml".toMediaTypeOrNull(), soapRequestBody)
 //
 //                // Create a POST request with the URL and RequestBody
 //                val request = Request.Builder()
@@ -174,10 +175,10 @@ class RegisterDisplay {
 //                // Execute the request and get the response
 //                val response = client.newCall(request).execute()
 //
-//                Log.e("Response", response.body()?.string() ?: "")
 //
 //                if (response.isSuccessful) {
-//                    return@withContext response.body()?.string()
+//                    Log.e("Response", xmlToJson(response.body?.string() ?: ""))
+//                    return@withContext response.body?.string()
 //                } else {
 //                    // Handle error cases
 //                    return@withContext null
@@ -189,6 +190,12 @@ class RegisterDisplay {
 //            return@withContext null
 //        }
 //    }
+    fun xmlToJson(xmlString: String): String {
+        val xmlMapper = XmlMapper()
+        val jsonObject = xmlMapper.readValue(xmlString, Object::class.java)
+        val jsonMapper = ObjectMapper()
+        return jsonMapper.writeValueAsString(jsonObject)
+    }
 
 //    fun registerDisplay(
 //        serverKey: String,
@@ -304,7 +311,7 @@ class SoapRequestAsyncTask : AsyncTask<Unit, Unit, String?>() {
             val client = OkHttpClient()
 
             // Create a RequestBody with the SOAP request body and set the Content-Type header
-            val requestBody = RequestBody.create("application/xml".toMediaTypeOrNull(), soapRequestBody)
+            val requestBody = soapRequestBody.toRequestBody("application/xml".toMediaTypeOrNull())
 
             // Create a POST request with the URL and RequestBody
             val request = Request.Builder()

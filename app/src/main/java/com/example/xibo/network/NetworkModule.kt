@@ -1,12 +1,10 @@
-package com.nej.wms_android.network
+package com.example.xibo.network
 
 import android.annotation.SuppressLint
 import android.app.Application
 import android.content.Context
 import com.example.xibo.BuildConfig
 import com.example.xibo.HeaderConstants
-import com.example.xibo.network.AppContext
-import com.example.xibo.network.SharedPref
 import com.example.xibo.service.ApiService
 import dagger.Module
 import dagger.Provides
@@ -17,7 +15,6 @@ import okhttp3.logging.HttpLoggingInterceptor
 //import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.converter.simplexml.SimpleXmlConverterFactory
 import java.security.SecureRandom
 import java.security.cert.CertificateException
 import java.security.cert.X509Certificate

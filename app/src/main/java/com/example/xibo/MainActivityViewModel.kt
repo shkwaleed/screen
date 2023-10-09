@@ -10,6 +10,8 @@ import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.ResponseBody
 import java.util.HashMap
 import java.util.Map
@@ -27,23 +29,29 @@ class MainActivityViewModel@Inject constructor(
         get() = _registerDisplayResponse
 
     fun registerDisplay(registerDisplayRequest: RegisterDisplayRequest) {
-        val requestBody =
-            """<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns="urn:xmds" xmlns:types="urn:xmds/encodedTypes" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <soap:Body soap:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
-    <tns:RegisterDisplay>
-      <serverKey xsi:type="xsd:string">StqjvluN</serverKey>
-      <hardwareKey xsi:type="xsd:string">12332112332112</hardwareKey>
-      <displayName xsi:type="xsd:string">PostMan</displayName>
-      <clientType xsi:type="xsd:string">android</clientType>
-      <clientVersion xsi:type="xsd:string">3</clientVersion>
-      <clientCode xsi:type="xsd:int">311</clientCode>
-      <macAddress xsi:type="xsd:string">123456</macAddress>
-    </tns:RegisterDisplay>
-  </soap:Body>
-</soap:Envelope>""".trimIndent()
-        Log.e("Request Json",(xmlToJson(requestBody)))
+        val requestBody = """
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
+    xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+    xmlns:tns="urn:xmds" xmlns:types="urn:xmds/encodedTypes"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <soap:Body soap:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+        <tns:RegisterDisplay>
+            <serverKey xsi:type="xsd:string">StqjvluN</serverKey>
+            <hardwareKey xsi:type="xsd:string">12332112332112</hardwareKey>
+            <displayName xsi:type="xsd:string">PostMan</displayName>
+            <clientType xsi:type="xsd:string">android</clientType>
+            <clientVersion xsi:type="xsd:string">3</clientVersion>
+            <clientCode xsi:type="xsd:int">311</clientCode>
+            <macAddress xsi:type="xsd:string">123456</macAddress>
+        </tns:RegisterDisplay>
+    </soap:Body>
+</soap:Envelope>
+""".trimIndent()
+        val request = requestBody.toRequestBody("application/xml".toMediaTypeOrNull())
+//        Log.e("Request Json",(xmlToJson(requestBody)))
         viewModelScope.launch {
-            val response: ResponseBody? = mainActivityRepository.registerDisplay(requestBody)
+            val response: ResponseBody? = mainActivityRepository.registerDisplay(request)
 
             if (response != null) {
                 val displayInfo = xmlToJson(response.string())

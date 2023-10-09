@@ -72,7 +72,6 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 //        val soapRequestTask = SoapRequestAsyncTask()
 //        soapRequestTask.execute()
 
-}
 //        val registerDisplay = RegisterDisplay()
 //
 //        coroutineScope.launch {
@@ -85,10 +84,13 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 //                311,
 //                "123456",
 //            )
-//            val displayInfo = XML.toJSONObject(response)
-//        Log.e("display Info",displayInfo.toString())
+//            Log.e("Response",response.toString())
+//            val displayInfo = RegisterDisplay().xmlToJson(response?:"")
+//            Log.e("display Info",displayInfo.toString())
 //        }
-//    }
+    }
+}
+
 //            val registerDisplayResponse = SoapResponseParser().parseRegisterDisplayResponse(
 //                response ?: "",
 //                RegisterDisplayResponse::class
@@ -96,7 +98,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 //            Log.e("registerDisplayResponse", registerDisplayResponse.toString())
 //        }
 
-    }
+//    }
 
 
 
