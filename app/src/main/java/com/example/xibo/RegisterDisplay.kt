@@ -18,6 +18,7 @@ import okhttp3.Callback
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
+import org.json.JSONObject
 import org.json.XML
 import retrofit2.converter.simplexml.SimpleXmlConverterFactory
 
@@ -123,79 +124,81 @@ class RegisterDisplay {
 //        }
 //    }
 
-//    suspend fun registerDisplay(
-//        serverKey: String,
-//        hardwareKey: String,
-//        displayName: String,
-//        clientType: String,
-//        clientVersion: String,
-//        clientCode: Int,
-//        macAddress: String
-//    ): String? {
-//        return withContext(Dispatchers.IO) {
-//            try {
-//                val URL = "https://xibo.decimalspace.com/xmds.php?v=6&method=registerDisplay"
-//
-//                // Define the SOAP request body
-//                val soapRequestBody = """
-//                <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
-//                    xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
-//                    xmlns:tns="urn:xmds" xmlns:types="urn:xmds/encodedTypes"
-//                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-//                    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-//                    <soap:Body soap:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
-//                        <tns:RegisterDisplay>
-//                            <serverKey xsi:type="xsd:string">$serverKey</serverKey>
-//                            <hardwareKey xsi:type="xsd:string">$hardwareKey</hardwareKey>
-//                            <displayName xsi:type="xsd:string">$displayName</displayName>
-//                            <clientType xsi:type="xsd:string">$clientType</clientType>
-//                            <clientVersion xsi:type="xsd:string">$clientVersion</clientVersion>
-//                            <clientCode xsi:type="xsd:int">$clientCode</clientCode>
-//                            <macAddress xsi:type="xsd:string">$macAddress</macAddress>
-//                        </tns:RegisterDisplay>
-//                    </soap:Body>
-//                </soap:Envelope>
-//            """.trimIndent()
-//
-//                // Create an OkHttpClient
-//                val client = OkHttpClient()
-//
-//                // Create a RequestBody with the SOAP request body and set the Content-Type header
-//                val requestBody =
-//                    RequestBody.create("application/xml".toMediaTypeOrNull(), soapRequestBody)
-//
-//                // Create a POST request with the URL and RequestBody
-//                val request = Request.Builder()
-//                    .url(URL)
-//                    .post(requestBody)
-//                    .addHeader("Content-Type", "application/xml")
-//                    .build()
-//
-//                Log.e("Request", "Request: " + soapRequestBody)
-//                // Execute the request and get the response
-//                val response = client.newCall(request).execute()
-//
-//
-//                if (response.isSuccessful) {
-//                    Log.e("Response", xmlToJson(response.body?.string() ?: ""))
-//                    return@withContext response.body?.string()
-//                } else {
-//                    // Handle error cases
-//                    return@withContext null
-//                }
-//            } catch (e: IOException) {
-//                e.printStackTrace()
-//                return@withContext null
-//            }
-//            return@withContext null
-//        }
-//    }
+    suspend fun registerDisplay(
+        serverKey: String,
+        hardwareKey: String,
+        displayName: String,
+        clientType: String,
+        clientVersion: String,
+        clientCode: Int,
+        macAddress: String
+    ): String? {
+        return withContext(Dispatchers.IO) {
+            try {
+                val URL = "https://xibo.decimalspace.com/xmds.php?v=6&method=registerDisplay"
+
+                // Define the SOAP request body
+                val soapRequestBody = """
+                <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
+                    xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+                    xmlns:tns="urn:xmds" xmlns:types="urn:xmds/encodedTypes"
+                    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+                    <soap:Body soap:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
+                        <tns:RegisterDisplay>
+                            <serverKey xsi:type="xsd:string">$serverKey</serverKey>
+                            <hardwareKey xsi:type="xsd:string">$hardwareKey</hardwareKey>
+                            <displayName xsi:type="xsd:string">$displayName</displayName>
+                            <clientType xsi:type="xsd:string">$clientType</clientType>
+                            <clientVersion xsi:type="xsd:string">$clientVersion</clientVersion>
+                            <clientCode xsi:type="xsd:int">$clientCode</clientCode>
+                            <macAddress xsi:type="xsd:string">$macAddress</macAddress>
+                        </tns:RegisterDisplay>
+                    </soap:Body>
+                </soap:Envelope>
+            """.trimIndent()
+
+                // Create an OkHttpClient
+                val client = OkHttpClient()
+
+                // Create a RequestBody with the SOAP request body and set the Content-Type header
+                val requestBody = soapRequestBody.toRequestBody("application/xml".toMediaTypeOrNull())
+
+                // Create a POST request with the URL and RequestBody
+                val request = Request.Builder()
+                    .url(URL)
+                    .post(requestBody)
+                    .addHeader("Content-Type", "application/xml")
+                    .build()
+
+                Log.e("Request", "Request: " + soapRequestBody)
+                // Execute the request and get the response
+                val response = client.newCall(request).execute()
+
+
+                if (response.isSuccessful) {
+                    val responseBody = xmlToJson(response.body?.string()?:"")
+//                    val activationMessage = extractDataFromJson(responseBody)
+                    Log.e("Response Json", responseBody)
+                    return@withContext response.body?.string()
+                } else {
+                    // Handle error cases
+                    return@withContext null
+                }
+            } catch (e: IOException) {
+                e.printStackTrace()
+                return@withContext null
+            }
+            return@withContext null
+        }
+    }
     fun xmlToJson(xmlString: String): String {
         val xmlMapper = XmlMapper()
         val jsonObject = xmlMapper.readValue(xmlString, Object::class.java)
         val jsonMapper = ObjectMapper()
         return jsonMapper.writeValueAsString(jsonObject)
     }
+
 
 //    fun registerDisplay(
 //        serverKey: String,
@@ -328,7 +331,7 @@ class SoapRequestAsyncTask : AsyncTask<Unit, Unit, String?>() {
             // Check if the request was successful
             Log.e("registerDisplayResponse", registerDisplayResponse.toString())
             if (response.isSuccessful) {
-                Log.e("Response",response.body?.string()?:"")
+                Log.e("Response",xmlToJson(response.body?.string()?:""))
                 return xmlToJson(response.body?.string()?:"")
             } else {
                 // Handle error cases

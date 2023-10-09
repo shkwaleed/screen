@@ -23,17 +23,17 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        viewModel.registerDisplay(
-            RegisterDisplayRequest(
-                "StqjvluN",
-                "12332112332112",
-                "PostMan",
-                "android",
-                "3",
-                311,
-                "123456",
-            )
-        )
+//        viewModel.registerDisplay(
+//            RegisterDisplayRequest(
+//                "StqjvluN",
+//                "12332112332112",
+//                "PostMan",
+//                "android",
+//                "3",
+//                311,
+//                "123456",
+//            )
+//        )
 
 //        viewModel.registerDisplayResponse.observe(this){ result->
 //            when (result) {
@@ -72,22 +72,23 @@ class MainActivity : BaseActivity<ActivityMainBinding>() {
 //        val soapRequestTask = SoapRequestAsyncTask()
 //        soapRequestTask.execute()
 
-//        val registerDisplay = RegisterDisplay()
-//
-//        coroutineScope.launch {
-//            val response = registerDisplay.registerDisplay(
-//                "StqjvluN",
-//                "12332112332111",
-//                "PostMan",
-//                "android",
-//                "3",
-//                311,
-//                "123456",
-//            )
-//            Log.e("Response",response.toString())
-//            val displayInfo = RegisterDisplay().xmlToJson(response?:"")
-//            Log.e("display Info",displayInfo.toString())
+        val registerDisplay = RegisterDisplay()
+
+        coroutineScope.launch {
+            val response = registerDisplay.registerDisplay(
+                "StqjvluN",
+                "12332112332111",
+                "PostMan",
+                "android",
+                "3",
+                311,
+                "123456",
+            )
+            Log.e("Response", response.toString())
+            val displayInfo = RegisterDisplay().xmlToJson(response ?: "")
+            Log.e("display Info", displayInfo.toString())
 //        }
+        }
     }
 }
 
