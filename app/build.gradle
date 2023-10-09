@@ -1,0 +1,111 @@
+plugins {
+    id 'com.android.application'
+    id 'kotlin-kapt'
+    id 'org.jetbrains.kotlin.android'
+    id 'com.google.dagger.hilt.android'
+
+}
+
+android {
+    namespace 'com.example.xibo'
+    compileSdk 33
+
+    buildFeatures {
+        buildConfig true
+        viewBinding true
+    }
+    configurations {
+        all {
+            resolutionStrategy {
+                force 'com.squareup.okhttp3:okhttp:4.2.2' // Use the version you want to use
+            }
+        }
+    }
+    defaultConfig {
+        applicationId "com.example.xibo"
+        minSdk 24
+        targetSdk 33
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    kotlinOptions {
+        jvmTarget = '17'
+    }
+}
+dependencies {
+
+    implementation 'androidx.core:core-ktx:1.8.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.9.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+//    implementation files('libs/ksoap2-android-assembly-3.6.4-jar-with-dependencies.jar')
+
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+
+    // retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    configurations.all {
+        exclude group: 'xpp3', module: 'xpp3'
+//        exclude group: 'com.squareup.okhttp3', module: 'okhttp'
+    }
+
+    implementation('com.squareup.retrofit2:converter-simplexml:2.9.0') {
+        exclude module: 'stax'
+        exclude module: 'stax-api'
+        exclude module: 'xpp3'
+    }
+//    implementation 'com.github.smart-fun:XmlToJson:1.5.2'
+    implementation "com.squareup.okhttp3:okhttp:4.2.2"
+    implementation "com.squareup.okhttp3:logging-interceptor:4.2.2"
+
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-scalars:2.9.0'
+    implementation "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2"
+
+
+
+    //hilt
+    implementation "com.google.dagger:hilt-android:2.44"
+    kapt "com.google.dagger:hilt-compiler:2.44"
+
+
+//    implementation 'com.google.code.ksoap2-android:ksoap2-android:3.6.4'
+    implementation "org.jetbrains.kotlin:kotlin-reflect:1.8.10"
+    implementation 'org.slf4j:slf4j-api:1.7.36'
+    //prefs
+    implementation 'androidx.preference:preference-ktx:1.2.1'
+
+    implementation 'org.simpleframework:simple-xml:2.7.1'
+    implementation "io.reactivex.rxjava2:rxjava:2.2.7"
+    implementation "io.reactivex.rxjava2:rxandroid:2.1.1"
+    implementation 'org.json:json:20230618'
+    implementation (group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-xml', version: '2.15.2'){
+        exclude group: 'javax.xml.stream'
+    }
+    implementation group: 'com.fasterxml.jackson.module', name: 'jackson-module-kotlin', version: '2.15.2'
+
+//    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-xml:1.2.2'
+
+
+
+}
