@@ -13,19 +13,19 @@ import retrofit2.Response
 import javax.inject.Inject
 
 class MainActivityRepository @Inject constructor(private val apiService: ApiService) {
-    suspend fun registerDisplay(registerDisplay: RequestBody): ResponseBody? {
+    suspend fun registerDisplay(registerDisplay: RequestBody): SoapResult {
         return withContext(Dispatchers.IO) {
             try{
                 val response =
                     apiService.registerDisplay("application/xml", registerDisplay).execute()
                 if (response.isSuccessful) {
-                    response.body()
+                    SoapResult.Success(response.body()?.string()?:"")
                 } else {
-                    response.errorBody() // Handle error cases here
+                    SoapResult.Error(response.errorBody()?.string()?:"") // Handle error cases here
                 }
             }catch (e: Exception){
                 e.printStackTrace()
-                null
+                SoapResult.Error("Error Occured")
             }
         }
     }

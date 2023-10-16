@@ -15,6 +15,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 //import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.converter.simplexml.SimpleXmlConverterFactory
 import java.security.SecureRandom
 import java.security.cert.CertificateException
 import java.security.cert.X509Certificate
@@ -66,7 +67,7 @@ object NetworkModule {
         //UAT:  http://nej-dev.corporate.nejinc.com/wms_mobile_webapi_dev/mobile/
         return Retrofit.Builder()
             .baseUrl(HeaderConstants.BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(SimpleXmlConverterFactory.create())
             .client(getUnsafeOkHttpClient()!!)
             .build()
     }

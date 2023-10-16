@@ -29,6 +29,7 @@ class MainActivityViewModel@Inject constructor(
         get() = _registerDisplayResponse
 
     fun registerDisplay(registerDisplayRequest: RegisterDisplayRequest) {
+        Log.e("request",registerDisplayRequest.toString())
         val requestBody = """
 <soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"
     xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
@@ -51,10 +52,12 @@ class MainActivityViewModel@Inject constructor(
         val request = requestBody.toRequestBody("application/xml".toMediaTypeOrNull())
 //        Log.e("Request Json",(xmlToJson(requestBody)))
         viewModelScope.launch {
-            val response: ResponseBody? = mainActivityRepository.registerDisplay(request)
+            val response: SoapResult = mainActivityRepository.registerDisplay(request)
 
             if (response != null) {
-                val displayInfo = xmlToJson(response.string())
+                val displayInfo = xmlToJson(response.toString())
+
+                _registerDisplayResponse.value = SoapResult.Success(displayInfo)
                 Log.e("display Info",displayInfo.toString())
 //                val result = SoapResponseParser().parseRegisterDisplayResponse(response.string())
 //                _registerDisplayResponse.value = displayInfo                // Handle the SOAP response here
